@@ -29,4 +29,4 @@ RUN apt-get update -y \
     && chmod +x /usr/local/bin/wait-for-it.sh
 
 # Aguardando até que o banco inicie antes de iniciar a aplicação
-CMD ["/bin/bash", "-c", "wait-for-it.sh -t 0 mysql-payment:3310 -- java -jar mspayment.jar"]
+CMD ["/bin/bash", "-c", "wait-for-it.sh -t 0 mysql-payment:3309 -- java -jar mspayment.jar"]

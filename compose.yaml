@@ -9,10 +9,8 @@ services:
       MYSQL_USER: 'paymentuser_mysql'
       MYSQL_PASSWORD: 'mSq@2024*PtEc'
       MYSQL_ROOT_PASSWORD: 'mSqR@@t*2024p@s'
-      MSUSER_HOSTNAME: ms-user
-      MSUSER_PORT: 8080
     ports:
-      - '3310:3310'
+      - '3309:3306'
     networks:
       - my_network
 
@@ -26,9 +24,11 @@ services:
     hostname: "ms-payment"
     environment:
       MYSQL_HOSTNAME: mysql-payment
-      MYSQL_PORT: 3310
+      MYSQL_PORT: 3309
+      MSUSER_HOSTNAME: ms-user
+      MSUSER_PORT: 8080
     ports:
-      - 8084:8084
+      - 8083:8083
     networks:
       - my_network
 
