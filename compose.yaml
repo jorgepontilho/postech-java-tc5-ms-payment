@@ -11,6 +11,11 @@ services:
       MYSQL_ROOT_PASSWORD: 'mSqR@@t*2024p@s'
     ports:
       - '3309:3306'
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "mysql-payment" ]
+      interval: 10s
+      timeout: 10s
+      retries: 5
     networks:
       - my_network
 
@@ -20,7 +25,8 @@ services:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      - mysql-payment
+      mysql-payment:
+        condition: service_healthy
     hostname: "ms-payment"
     environment:
       MYSQL_HOSTNAME: mysql-payment
