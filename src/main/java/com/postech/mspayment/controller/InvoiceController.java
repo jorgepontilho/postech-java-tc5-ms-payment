@@ -2,13 +2,13 @@ package com.postech.mspayment.controller;
 
 import com.postech.mspayment.entity.Invoice;
 import com.postech.mspayment.entity.InvoiceDTO;
-import com.postech.mspayment.repository.InvoiceRepository;
 import com.postech.mspayment.service.InvoiceService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -16,14 +16,21 @@ import java.util.List;
 @RequestMapping("/invoices")
 public class InvoiceController {
 
-    @Autowired
-    private InvoiceRepository invoiceRepository;
+    private static final Logger logger = LoggerFactory.getLogger(InvoiceController.class);
 
     @Autowired
     private InvoiceService invoiceService;
 
-    @Autowired
-    private RestTemplate restTemplate;
+    @PostMapping
+    public ResponseEntity<InvoiceDTO> createInvoice(@RequestBody InvoiceDTO invoiceDTO) {
+        try {
+            Invoice invoiceCreated = invoiceService.createInvoice(invoiceDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(invoiceCreated.toInvoiceDTO());
+        } catch (Exception e) {
+            logger.error("Error creating invoice", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 
     @GetMapping
     public ResponseEntity<?> getAllInvoices() {
@@ -37,18 +44,6 @@ public class InvoiceController {
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    @PostMapping
-    public ResponseEntity<Invoice> createInvoice(@RequestBody InvoiceDTO invoiceDTO) {
-
-        try {
-            Invoice createdInvoice = invoiceService.createInvoice(invoiceDTO);
-            return new ResponseEntity<>(createdInvoice, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
     }
 
     @GetMapping("/{id}")

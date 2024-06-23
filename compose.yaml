@@ -10,7 +10,7 @@ services:
       MYSQL_PASSWORD: 'mSq@2024*PtEc'
       MYSQL_ROOT_PASSWORD: 'mSqR@@t*2024p@s'
     ports:
-      - '3309:3306'
+      - '3309:3306' # Porta externa:porta interna
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "mysql-payment" ]
       interval: 10s
@@ -30,7 +30,7 @@ services:
     hostname: "ms-payment"
     environment:
       MYSQL_HOSTNAME: mysql-payment
-      MYSQL_PORT: 3309
+      MYSQL_PORT: 3306 # Porta interna usada para comunicação entre containers
       MSUSER_HOSTNAME: ms-user
       MSUSER_PORT: 8080
     ports:

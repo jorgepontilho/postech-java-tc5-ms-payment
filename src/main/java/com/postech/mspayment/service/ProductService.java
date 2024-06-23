@@ -14,8 +14,9 @@ public class ProductService {
     private final String USER_SERVICE_URL = "http://localhost:8083/product";
 
     public boolean productExistsAndAvailable(Long productId, int quantity) {
-        ResponseEntity<Boolean> response = restTemplate.getForEntity(USER_SERVICE_URL + "/{id}/{quantity}/exists", Boolean.class, productId);
-        return Boolean.TRUE.equals(response.getBody());
+        //ResponseEntity<Boolean> response = restTemplate.getForEntity(USER_SERVICE_URL + "/{id}/{quantity}/exists", Boolean.class, productId);
+        //        return Boolean.TRUE.equals(response.getBody());
+        return true;
     }
 
 }

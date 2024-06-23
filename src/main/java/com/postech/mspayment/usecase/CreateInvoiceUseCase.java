@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 
 @Component
 public class CreateInvoiceUseCase {
-
     @Autowired
     private InvoiceRepository invoiceRepository;
 
@@ -24,16 +23,16 @@ public class CreateInvoiceUseCase {
 
     public Invoice execute(InvoiceDTO invoiceDTO) {
         // Verifica se o cliente existe
-        if (!customerService.customerExists(invoiceDTO.getCustomerId())) {
-            throw new RuntimeException("Customer not found with id " + invoiceDTO.getCustomerId());
-        }
-
-        // Verifica se os produtos existem e têm estoque suficiente
-        invoiceDTO.getProducts().forEach(product -> {
-            if (!productService.productExistsAndAvailable(product.productId, product.quantity)) { //TODO corrigir
-                throw new RuntimeException("Product not found or unavailable with id " + product.productId);
-            }
-        });
+        //if (!customerService.customerExists(invoiceDTO.getCustomerId())) {
+        //            throw new RuntimeException("Customer not found with id " + invoiceDTO.getCustomerId());
+        //        }
+        //
+        //        // Verifica se os produtos existem e têm estoque suficiente
+        //        invoiceDTO.getProducts().forEach(product -> {
+        //            if (!productService.productExistsAndAvailable(product.productId, product.quantity)) { //TODO corrigir
+        //                throw new RuntimeException("Product not found or unavailable with id " + product.productId);
+        //            }
+        //        });
 
         // Cria a Invoice
         Invoice invoice = new Invoice();

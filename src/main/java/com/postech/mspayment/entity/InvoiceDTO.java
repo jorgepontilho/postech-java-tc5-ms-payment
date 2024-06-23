@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 public class InvoiceDTO {
 
@@ -21,16 +19,15 @@ public class InvoiceDTO {
     private String customerName;
 
     @NotNull
-    private List<Invoice.ProductItem> products;
+    private List<ProductItem> products;
 
     @NotNull
     private BigDecimal totalAmount;
 
     @Nullable
-    private Double discount;
+    private BigDecimal discount;
     @NotNull
     private BigDecimal totalPayment;
-    @NotNull
     private Boolean status;
 
 }
