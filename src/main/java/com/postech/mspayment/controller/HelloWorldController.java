@@ -10,15 +10,19 @@ public class HelloWorldController {
     public String helloWorld() {
         return "Hello World";
     }
+/**
+ *
+ @GetMapping({"product/{id}/{quantity}/exists"})
+ public java.lang.String helloWorld2() {
 
-    @GetMapping("product/{id}/{quantity}/exists")
-    public String helloWorld2() {
-        return "fake url";
-    }
+ return "Hello propduct";
+ }
 
-    @GetMapping("/customer/{id}/exists")
-    public String helloWorld3() {
-        return "fake url customer";
-    }
+ @GetMapping({"/customer/{id}/exists"})
+ public java.lang.String helloWorld3() {
+
+ return "Hello customer";
+ }
+ */
 
 }
