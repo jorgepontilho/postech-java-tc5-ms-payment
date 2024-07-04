@@ -43,9 +43,4 @@ public class PaymentController {
         private Long basketId;
         private BigDecimal amount;
     }
-
-    @GetMapping("")
-    public ResponseEntity<?> getPaymentStatus() {
-        return ResponseEntity.ok("okokokok");
-    }
 }
