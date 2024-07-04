@@ -14,11 +14,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/invoices")
+@RequestMapping("/api/invoices")
 public class InvoiceController {
 
     private static final Logger logger = LoggerFactory.getLogger(InvoiceController.class);
@@ -26,21 +27,26 @@ public class InvoiceController {
     @Autowired
     private InvoiceService invoiceService;
 
-    @PostMapping
-    @Operation(summary = "Create a new invoice with a DTO", responses = {
+    @GetMapping("/create/{customerId}/{basketId}/{amount}")
+    @Operation(summary = "Create a new invoice", responses = {
             @ApiResponse(description = "The new invoice was created", responseCode = "201")
     })
-    public ResponseEntity<?> createInvoice(@RequestBody InvoiceDTO invoiceDTO) {
+    public ResponseEntity<?> create(@PathVariable("customerId") Long customerId,
+                                    @PathVariable("basketId") Long basketId,
+                                    @PathVariable("amount") BigDecimal amount) {
         try {
-            Invoice invoiceCreated = invoiceService.createInvoice(invoiceDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(invoiceCreated.toInvoiceDTO());
+            logger.info(" * Creating invoice for customerId: {}, basketId: {}, amount: {}", customerId, basketId, amount);
+
+            InvoiceDTO invoiceCreatedDTO = invoiceService.createInvoice(customerId, basketId, amount);
+
+            return new ResponseEntity<>(invoiceCreatedDTO, HttpStatus.CREATED);
         } catch (Exception e) {
             logger.error("Error creating invoice", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
-    @GetMapping
+    @GetMapping("/getAll")
     @Operation(summary = "Get all invoices", responses = {
             @ApiResponse(description = "List of all invoices", responseCode = "200",  content = @Content(schema = @Schema(implementation = InvoiceDTO.class)))
     })
@@ -70,9 +76,9 @@ public class InvoiceController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    //Nao pode update uma invoice, pode anular e criar uma nova com base no carriho, mas nunca modifica-la.
+    //Nao pode update uma invoice
 
-    //Aqui tem que ser soft delete
+    //soft delete
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete an invoice by ID", responses = {
             @ApiResponse(description = "The invoice was deleted", responseCode = "204"),
