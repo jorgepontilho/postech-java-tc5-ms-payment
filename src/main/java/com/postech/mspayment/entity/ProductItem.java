@@ -35,4 +35,7 @@ public class ProductItem {
 
     @NotNull
     private BigDecimal price;
+
+    public ProductItem(ProductItemDTO product) {
+    }
 }

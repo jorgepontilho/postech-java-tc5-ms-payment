@@ -2,49 +2,70 @@ package com.postech.mspayment.usecase;
 
 import com.postech.mspayment.entity.Invoice;
 import com.postech.mspayment.entity.InvoiceDTO;
+import com.postech.mspayment.entity.ProductItem;
+import com.postech.mspayment.entity.ProductItemDTO;
 import com.postech.mspayment.repository.InvoiceRepository;
 import com.postech.mspayment.service.CustomerService;
-import com.postech.mspayment.service.ProductService;
+import com.postech.mspayment.service.PaymentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Component
 public class CreateInvoiceUseCase {
+
+    private static final Logger logger = LoggerFactory.getLogger(PaymentService.class);
+
     @Autowired
     private InvoiceRepository invoiceRepository;
 
     @Autowired
     private CustomerService customerService;
 
-    @Autowired
-    private ProductService productService;
+    //@Autowired
+    //    private BasketService basketService;
 
-    public Invoice execute(InvoiceDTO invoiceDTO) {
-        // Verifica se o cliente existe
-        //if (!customerService.customerExists(invoiceDTO.getCustomerId())) {
-        //            throw new RuntimeException("Customer not found with id " + invoiceDTO.getCustomerId());
-        //        }
-        //
-        //        // Verifica se os produtos existem e têm estoque suficiente
-        //        invoiceDTO.getProducts().forEach(product -> {
-        //            if (!productService.productExistsAndAvailable(product.productId, product.quantity)) { //TODO corrigir
-        //                throw new RuntimeException("Product not found or unavailable with id " + product.productId);
-        //            }
-        //        });
+    public InvoiceDTO execute(Long customerId, Long basketId, BigDecimal amount) throws Exception {
+
+        logger.info(" * Creating invoice use case ");
+        // Recupera as informacoes do usuario
+        CustomerService.UserDTO user = customerService.getCustomerById(customerId);
+
+        String customerName = user.getName();
 
         // Cria a Invoice
         Invoice invoice = new Invoice();
-        invoice.setCustomerId(invoiceDTO.getCustomerId());
-        invoice.setProducts(invoiceDTO.getProducts());
-        invoice.setTotalAmount(invoiceDTO.getTotalAmount());
-        invoice.setDiscount(invoiceDTO.getDiscount());
-        invoice.setTotalPayment(invoiceDTO.getTotalPayment());
+        invoice.setCustomerId(customerId);
+        invoice.setCustomerName(customerName);
+        invoice.setTotalAmount(amount);
         invoice.setCreatedAt(LocalDateTime.now());
         invoice.setUpdatedAt(LocalDateTime.now());
+        Invoice invoiceSaved = invoiceRepository.save(invoice);
 
-        return invoiceRepository.save(invoice);
+        return invoiceSaved.toInvoiceDTO();
+
+        //Recupera as informacoes do carrinho
+        //List<ProductItemDTO> products = basketService.getProductsByBasketId(basketId);
+        //// Retrieve basket data
+        //        Basket basket = restTemplate.getForObject("http://localhost:8083/api/baskets/" + basketId, Basket.class);
+        //        if (basket == null) {
+        //            throw new Exception("Error retrieving basket data");
+        //        }
+
+        // Add os ProductItems
+        //for (ProductItemDTO product : products) {
+        //            product.setInvoiceId(invoiceSaved.getId());
+        //
+        //            ProductItem productItem = new ProductItem(product);
+        //
+        //            invoiceSaved.getProducts().add(productItem);
+        //        }
+
+        //invoiceRepository.save(invoiceSaved);
     }
 }
 

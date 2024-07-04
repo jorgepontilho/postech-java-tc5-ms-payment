@@ -1,6 +1,7 @@
 package com.postech.mspayment.entity;
 
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,10 +11,16 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class InvoiceDTO {
 
     @NotNull
     private Long customerId;
+
+    @Email
+    @Nullable
+    private String email;
 
     @NotNull
     private String customerName;
@@ -24,10 +31,6 @@ public class InvoiceDTO {
     @NotNull
     private BigDecimal totalAmount;
 
-    @Nullable
-    private BigDecimal discount;
-    @NotNull
-    private BigDecimal totalPayment;
     private Boolean status;
 
 }
