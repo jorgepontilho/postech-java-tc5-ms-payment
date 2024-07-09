@@ -40,7 +40,7 @@ public class CreateInvoiceUseCase {
         // Cria a Invoice
         Invoice invoice = new Invoice();
         invoice.setCustomerId(customerId);
-        invoice.setCustomerName(customerName);
+        invoice.setBasketId(basketId);
         invoice.setTotalAmount(amount);
         invoice.setCreatedAt(LocalDateTime.now());
         invoice.setUpdatedAt(LocalDateTime.now());
@@ -64,6 +64,19 @@ public class CreateInvoiceUseCase {
         //
         //            invoiceSaved.getProducts().add(productItem);
         //        }
+        //@Data
+        //@RequiredArgsConstructor
+        //public class CartItemDTO {
+        //
+        //    private Long id;
+        //    @NotNull
+        //    private Long productId;
+        //    @Min(value = 1, message = "Quantity must be greater than zero")
+        //    private int quantity;
+        //    @NotNull
+        //    private BigDecimal price;
+        //
+        //}
 
         //invoiceRepository.save(invoiceSaved);
     }

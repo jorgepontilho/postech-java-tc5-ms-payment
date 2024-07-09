@@ -24,7 +24,7 @@ public class Invoice {
 
     private Long customerId;  // Referencia ao ID do cliente
 
-    private String customerName;
+    private Long basketId; // Referencia ao ID da cesta
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "invoice", orphanRemoval = true)
     @JsonManagedReference
@@ -50,7 +50,7 @@ public class Invoice {
     public InvoiceDTO toInvoiceDTO() {
         InvoiceDTO invoiceDTO = new InvoiceDTO();
         invoiceDTO.setCustomerId(this.customerId);
-        invoiceDTO.setCustomerName(this.customerName);
+        invoiceDTO.setBasketId(this.basketId);
         invoiceDTO.setProducts(this.products);
         invoiceDTO.setTotalAmount(this.totalAmount);
         invoiceDTO.setStatus(this.status);
@@ -60,7 +60,7 @@ public class Invoice {
     public Invoice fromDTO(InvoiceDTO invoiceDTO) {
         Invoice invoice = new Invoice();
         invoice.setCustomerId(invoiceDTO.getCustomerId());
-        invoice.setCustomerName(invoiceDTO.getCustomerName());
+        invoice.setBasketId(invoiceDTO.getBasketId());
         invoice.setProducts(invoiceDTO.getProducts());
         invoice.setTotalAmount(invoiceDTO.getTotalAmount());
         invoice.setStatus(invoiceDTO.getStatus());

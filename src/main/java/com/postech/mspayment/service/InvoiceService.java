@@ -35,9 +35,9 @@ public class InvoiceService {
         Optional<Invoice> optionalInvoice = invoiceRepository.findById(id);
 
         if (optionalInvoice.isPresent() && optionalInvoice.get().getDeletedAt() == null) {
-            return Optional.empty();
-        } else {
             return optionalInvoice;
+        } else {
+            return Optional.empty();
         }
     }
 
