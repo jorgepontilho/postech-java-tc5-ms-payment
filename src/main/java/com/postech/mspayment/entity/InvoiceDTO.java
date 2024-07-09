@@ -18,12 +18,8 @@ public class InvoiceDTO {
     @NotNull
     private Long customerId;
 
-    @Email
-    @Nullable
-    private String email;
-
     @NotNull
-    private String customerName;
+    private Long basketId;
 
     @NotNull
     private List<ProductItem> products;
@@ -33,4 +29,26 @@ public class InvoiceDTO {
 
     private Boolean status;
 
+    public InvoiceDTO(long l, Long customerId, Long basketId, BigDecimal amount) {
+    }
+
+    public Invoice toInvoice() {
+        Invoice invoice = new Invoice();
+        invoice.setCustomerId(this.customerId);
+        invoice.setBasketId(this.basketId);
+        invoice.setProducts(this.products);
+        invoice.setTotalAmount(this.totalAmount);
+        invoice.setStatus(this.status);
+        return invoice;
+    }
+
+    public Invoice fromInvoice(Invoice invoice) {
+        Invoice invoiceDTO = new Invoice();
+        invoiceDTO.setCustomerId(invoice.getCustomerId());
+        invoiceDTO.setBasketId(invoice.getBasketId());
+        invoiceDTO.setProducts(invoice.getProducts());
+        invoiceDTO.setTotalAmount(invoice.getTotalAmount());
+        invoiceDTO.setStatus(invoice.getStatus());
+        return invoiceDTO;
+    }
 }
