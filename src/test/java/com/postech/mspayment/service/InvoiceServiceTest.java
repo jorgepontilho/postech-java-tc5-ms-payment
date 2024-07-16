@@ -40,14 +40,14 @@ public class InvoiceServiceTest {
         invoice = new Invoice();
         invoice.setId(1L);
         invoice.setCustomerId(1L);
-        invoice.setBasketId(1L); //basket id
+        invoice.setCartId(1L); //basket id
         invoice.setTotalAmount(BigDecimal.valueOf(100.00));
         invoice.setDeletedAt(null);
     }
 
     @Test
     void testCreateInvoice() throws Exception {
-        InvoiceDTO invoiceDTO = new InvoiceDTO(1L, 1L, List.of(), BigDecimal.valueOf(100.00), null);
+        InvoiceDTO invoiceDTO = new InvoiceDTO(1L, 1L, BigDecimal.valueOf(100.00), null);
         when(createInvoiceUseCase.execute(anyLong(), anyLong(), any(BigDecimal.class))).thenReturn(invoiceDTO);
 
         InvoiceDTO createdInvoice = invoiceService.createInvoice(1L, 1L, BigDecimal.valueOf(100.00));
