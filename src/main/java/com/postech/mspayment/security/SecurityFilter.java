@@ -1,6 +1,8 @@
 package com.postech.mspayment.security;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.postech.mspayment.service.PaymentService;
 import org.slf4j.Logger;
@@ -23,33 +25,48 @@ public class SecurityFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         logger.info("Security filter: Validating request {}", request.getRequestURI());
-        boolean isValid = validateRequest(request);
-        if (!isValid) {
-            response.sendError((int) request.getAttribute("error_code"), (String) request.getAttribute("error"));
-            return;
-        }
+        validateRequest(request);
         filterChain.doFilter(request, response);
     }
 
-    private boolean validateRequest(HttpServletRequest request) {
+    private void validateRequest(HttpServletRequest request) {
         String token = recoverToken(request);
         if (token == null) {
             request.setAttribute("error_code", HttpStatus.BAD_REQUEST.value());
             request.setAttribute("error", "Bearer token inválido");
-            return false;
+            return;
         }
 
         SecurityUser securityUser = PaymentService.getUserFromToken(token);
         if (securityUser == null) {
             request.setAttribute("error_code", HttpStatus.BAD_REQUEST.value());
             request.setAttribute("error", "Bearer token inválido");
-            return false;
+            return;
         }
 
-        // Token is valid and user is authenticated
-        return true;
+        if (!checkAuthorization(request.getMethod(), securityUser.getRole())) {
+            request.setAttribute("error_code", HttpStatus.METHOD_NOT_ALLOWED);
+            request.setAttribute("error", "Método [" + request.getMethod()
+                    + "] não autorizado [" + securityUser + "]");
+        }
     }
 
+    private boolean checkAuthorization(String method, String securityEnumUserRole) {
+        List<SecurityMethodAuthorized> methodAuthLst = new ArrayList<>();
+        methodAuthLst.add(new SecurityMethodAuthorized("GET", "USER"));
+        methodAuthLst.add(new SecurityMethodAuthorized("GET", "ADMIN"));
+        methodAuthLst.add(new SecurityMethodAuthorized("POST", "ADMIN"));
+        methodAuthLst.add(new SecurityMethodAuthorized("PUT", "ADMIN"));
+        methodAuthLst.add(new SecurityMethodAuthorized("DELETE", "ADMIN"));
+
+        for (SecurityMethodAuthorized methodAuth : methodAuthLst) {
+            if (methodAuth.getMethod().equals(method)
+                    && methodAuth.getRole().equals(securityEnumUserRole)) {
+                return true;
+            }
+        }
+        return false;
+    }
     private String recoverToken(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         logger.info("Authorization Header: {}", authHeader);

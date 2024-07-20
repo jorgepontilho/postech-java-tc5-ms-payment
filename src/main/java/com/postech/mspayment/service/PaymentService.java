@@ -22,7 +22,7 @@ public class PaymentService {
 
 
     @Autowired
-    private static RestTemplate restTemplate;
+    static RestTemplate restTemplate = new RestTemplate();
 
     private static String msUserUrl;
 
@@ -35,8 +35,8 @@ public class PaymentService {
         SecurityUser securityUser= new SecurityUser();
         try {
             String url = msUserUrl + "/" + token;
-            ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
             ObjectMapper mapper = new ObjectMapper();
+            ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
             Map<String, Object> map = mapper.readValue(response.getBody(), Map.class);
             securityUser.setLogin( map.get("login").toString());
             securityUser.setRole( map.get("role").toString());

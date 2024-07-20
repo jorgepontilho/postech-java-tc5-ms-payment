@@ -20,25 +20,19 @@ public class SecurityConfigurations {
     SecurityFilter securityFilter;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeConfig -> {
                     authorizeConfig.requestMatchers(
-                                    "/swagger-ui/**",
-                                    "/swagger-resources/**",
-                                    "/v3/api-docs",
-                                    "/v3/api-docs/**",
-                                    "/webjars/**",
-                                    "/api/invoices")
+                                    "/swagger-ui/**", "/swagger-resources/**",
+                                    "/v3/api-docs", "/v3/api-docs/**", "/webjars/**", "")
                             .permitAll();
-                    authorizeConfig.requestMatchers("/api/payments").permitAll()
-                            .anyRequest().authenticated();
-                })
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return httpSecurity.build();
+                    authorizeConfig.requestMatchers("/api/payments","/api/payments/**",
+                            "/api/invoices", "/api/invoices/**")
+                            .permitAll().anyRequest().authenticated();
+                }).build();
     }
 
     @Bean
