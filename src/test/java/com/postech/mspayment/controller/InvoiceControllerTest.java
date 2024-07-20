@@ -54,7 +54,7 @@ public class InvoiceControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.customerId").value(invoiceDTO.getCustomerId()))
-                .andExpect(jsonPath("$.basketId").value(invoiceDTO.getBasketId()))
+                .andExpect(jsonPath("$.basketId").value(invoiceDTO.getCartId()))
                 .andExpect(jsonPath("$.totalAmount").value(invoiceDTO.getTotalAmount()));
     }
 

@@ -11,27 +11,34 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfigurations {
-
     @Autowired
     SecurityFilter securityFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeConfig -> {
                     authorizeConfig.requestMatchers(
-                                    "/swagger-ui/**", "/swagger-resources/**",
-                                    "/v3/api-docs", "/v3/api-docs/**", "/webjars/**", "/api/invoices", "")
+                                    "/swagger-ui/**",
+                                    "/swagger-resources/**",
+                                    "/v3/api-docs",
+                                    "/v3/api-docs/**",
+                                    "/webjars/**",
+                                    "/api/invoices")
                             .permitAll();
-                    authorizeConfig.requestMatchers("/api/payments")
-                            .permitAll().anyRequest().authenticated();
-                }).build();
+                    authorizeConfig.requestMatchers("/api/payments").permitAll()
+                            .anyRequest().authenticated();
+                })
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return httpSecurity.build();
     }
 
     @Bean
