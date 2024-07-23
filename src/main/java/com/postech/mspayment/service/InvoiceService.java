@@ -25,8 +25,8 @@ public class InvoiceService {
     @Autowired
     private CreateInvoiceUseCase createInvoiceUseCase;
 
-    public InvoiceDTO createInvoice(Long customerId, Long basketId, BigDecimal amount) throws Exception {
-        return createInvoiceUseCase.execute(customerId,basketId,amount);
+    public InvoiceDTO createInvoice(Long customerId, Long cartId, BigDecimal amount) throws Exception {
+        return createInvoiceUseCase.execute(customerId,cartId,amount);
     }
 
     //Check si l'invoice existe et qu'elle n'est pas deleted sinon ne la retourn pas

@@ -27,17 +27,17 @@ public class InvoiceController {
     @Autowired
     private InvoiceService invoiceService;
 
-    @GetMapping("/create/{customerId}/{basketId}/{amount}")
+    @GetMapping("/create/{customerId}/{cartId}/{amount}")
     @Operation(summary = "Create a new invoice", responses = {
             @ApiResponse(description = "The new invoice was created", responseCode = "201")
     })
     public ResponseEntity<?> create(@PathVariable("customerId") Long customerId,
-                                    @PathVariable("basketId") Long basketId,
+                                    @PathVariable("cartId") Long cartId,
                                     @PathVariable("amount") BigDecimal amount) {
         try {
-            logger.info(" * Creating invoice for customerId: {}, basketId: {}, amount: {}", customerId, basketId, amount);
+            logger.info(" * Creating invoice for customerId: {}, cartId: {}, amount: {}", customerId, cartId, amount);
 
-            InvoiceDTO invoiceCreatedDTO = invoiceService.createInvoice(customerId, basketId, amount);
+            InvoiceDTO invoiceCreatedDTO = invoiceService.createInvoice(customerId, cartId, amount);
 
             return new ResponseEntity<>(invoiceCreatedDTO, HttpStatus.CREATED);
         } catch (Exception e) {
