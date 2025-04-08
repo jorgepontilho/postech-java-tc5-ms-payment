@@ -56,3 +56,6 @@ http://localhost:8083/swagger-ui/index.html
 App: http://localhost:8083
 
 MySQL: jdbc:mysql://localhost:3309/paymentdb
+
+## Git
+https://github.com/jorgepontilho/postech-java-tc5-ms-payment
